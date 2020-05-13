@@ -220,6 +220,20 @@ def configure(keymap):
                             "vncviewer.exe",          # UltraVNC
                             "vncviewer64.exe",        # UltraVNC
                            ]
+    not_emacs_target.extend([
+        "puttyjp.exe",                  # PuTTYjp
+        "RLogin.exe",                   # RLogin
+        "Pengwin.exe",                  # Pengwin
+        "remote-viewer.exe",            # Virtual Machine Viewer
+        "x64.exe",                      # VICE C64
+        "xvic.exe",                     # VICE VIC20
+        "openmsx.exe",                  # openMSX
+        "blueMSX.exe",                  # blueMSX
+        "Cubase9.5.exe",                # Cubase
+        "Astro.exe",                    # Astroneer
+        "Astro-Win64-Shipping.exe",     # Astroneer
+        "Minecraft.Windows.exe",        # Minecraft
+        ])
 
     # IME の切り替え“のみをしたい”アプリケーションソフトを指定する
     # （指定できるアプリケーションソフトは、not_emacs_target で（除外）指定したものからのみとなります）
@@ -245,6 +259,7 @@ def configure(keymap):
                             "ttermpro.exe",           # TeraTerm
                             "MobaXterm.exe",          # MobaXterm
                            ]
+    ime_target           = [ ]
 
     # clipboard 監視の対象外とするアプリケーションソフトを指定する
     not_clipboard_target = ["EXCEL.EXE"]              # Excel
@@ -259,7 +274,7 @@ def configure(keymap):
     use_ctrl_i_as_tab = True
 
     # Escキーを Metaキーとして使うかどうかを指定する（True: 使う、False: 使わない）
-    use_esc_as_meta = True
+    use_esc_as_meta = False
 
     # Ctl-xプレフィックスキーに使うキーを指定する
     # （Ctl-xプレフィックスキーのモディファイアキーは、Ctrl または Alt のいずれかから指定してください）
@@ -270,7 +285,7 @@ def configure(keymap):
     scroll_key = ["M-v", "C-v"]
 
     # Emacs日本語入力モードを使うかどうかを指定する（True: 使う、False: 使わない）
-    use_emacs_ime_mode = True
+    use_emacs_ime_mode = False
 
     # Emacs日本語入力モードが有効なときに表示するバルーンメッセージを指定する
     # emacs_ime_mode_balloon_message = None
@@ -284,6 +299,7 @@ def configure(keymap):
     toggle_input_method_key += ["C-Yen"]
     toggle_input_method_key += ["C-o"]
     # toggle_input_method_key += ["O-LAlt"]
+    toggle_input_method_key = ["C-o"]
 
     #---------------------------------------------------------------------------------------------------
     # IME を切り替えるキーの組み合わせ（disable、enable の順）を指定する（複数指定可）
@@ -366,8 +382,8 @@ def configure(keymap):
     desktop_switching_key = [["A-C-b", "A-C-f"], ["A-C-Left", "A-C-Right"]] # for Windows 10
 
     # IME の「単語登録」プログラムを起動するキーを指定する
-    # word_register_key = None
-    word_register_key = "C-CloseBracket"
+    word_register_key = None
+    #word_register_key = "C-CloseBracket"
 
     # IME の「単語登録」プログラムとそのパラメータを指定する（for Google日本語入力）
     # word_register_name = r"C:\Program Files (x86)\Google\Google Japanese Input\GoogleIMEJaTool.exe"
