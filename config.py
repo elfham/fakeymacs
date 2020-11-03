@@ -286,6 +286,7 @@ def configure(keymap):
         "RLogin.exe",                   # RLogin
         "Pengwin.exe",                  # Pengwin
         "remote-viewer.exe",            # Virtual Machine Viewer
+        "DOSBox.exe",                   # DOSBox
         "x64.exe",                      # VICE C64
         "xvic.exe",                     # VICE VIC20
         "openmsx.exe",                  # openMSX
