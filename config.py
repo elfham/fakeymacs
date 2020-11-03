@@ -281,22 +281,6 @@ def configure(keymap):
                                "vncviewer64.exe",        # UltraVNC
                               ]
 
-    fc.not_emacs_target.extend([
-        "puttyjp.exe",                  # PuTTYjp
-        "RLogin.exe",                   # RLogin
-        "Pengwin.exe",                  # Pengwin
-        "remote-viewer.exe",            # Virtual Machine Viewer
-        "DOSBox.exe",                   # DOSBox
-        "x64.exe",                      # VICE C64
-        "xvic.exe",                     # VICE VIC20
-        "openmsx.exe",                  # openMSX
-        "blueMSX.exe",                  # blueMSX
-        "Cubase9.5.exe",                # Cubase
-        "Astro.exe",                    # Astroneer
-        "Astro-Win64-Shipping.exe",     # Astroneer
-        "Minecraft.Windows.exe",        # Minecraft
-        ])
-
     # IME の切り替え“のみをしたい”アプリケーションソフトを指定する
     # （指定できるアプリケーションソフトは、not_emacs_target で（除外）指定したものからのみとなります）
     fc.ime_target           = ["bash.exe",               # WSL
@@ -320,7 +304,6 @@ def configure(keymap):
                                "ttermpro.exe",           # TeraTerm
                                "MobaXterm.exe",          # MobaXterm
                               ]
-    fc.ime_target           = [ ]
 
     # キーマップ毎にキー設定をスキップするキーを指定する
     # （リストに指定するキーは、define_key の第二引数に指定する記法のキーとしてください。"A-v" や "C-v"
@@ -374,7 +357,7 @@ def configure(keymap):
     fc.scroll_key = ["M-v", "C-v"]
 
     # Emacs日本語入力モードを使うかどうかを指定する（True: 使う、False: 使わない）
-    fc.use_emacs_ime_mode = False
+    fc.use_emacs_ime_mode = True
 
     # Emacs日本語入力モードが有効なときに表示するバルーンメッセージを指定する
     # fc.emacs_ime_mode_balloon_message = None
@@ -385,7 +368,6 @@ def configure(keymap):
     fc.toggle_input_method_key += ["C-Yen"]
     fc.toggle_input_method_key += ["C-o"]
     # fc.toggle_input_method_key += ["O-LAlt"]
-    fc.toggle_input_method_key = ["C-o"]
 
     #---------------------------------------------------------------------------------------------------
     # IME を切り替えるキーの組み合わせ（disable、enable の順）を指定する（複数指定可）
@@ -475,8 +457,8 @@ def configure(keymap):
     # IME の「単語登録」プログラムを利用するための設定を行う
 
     ## IME の「単語登録」プログラムを起動するキーを指定する
-    fc.word_register_key = None
-    # fc.word_register_key = "C-CloseBracket"
+    # fc.word_register_key = None
+    fc.word_register_key = "C-CloseBracket"
 
     ## IME の「単語登録」プログラムとそのパラメータを指定する
 
