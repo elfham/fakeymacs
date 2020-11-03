@@ -14,3 +14,4 @@ pull:
 
 install:
 	cp config.py $(KEYHAC_DIR)
+	cp config_personal.py $(KEYHAC_DIR)
