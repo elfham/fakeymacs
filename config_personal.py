@@ -30,6 +30,7 @@ keymap.setFont("ＭＳ ゴシック", 12)
 fc.ime = "old_Microsoft_IME"
 # fc.ime = "new_Microsoft_IME"
 # fc.ime = "Google_IME"
+# fc.ime = None
 
 ####################################################################################################
 ## 基本設定
@@ -92,6 +93,10 @@ fc.emacs_exclusion_key  = {"chrome.exe"       : ["C-l", "C-t"],
 fc.use_emacs_ime_mode = False
 
 # IME をトグルで切り替えるキーを指定する（複数指定可）
+fc.toggle_input_method_key = []
+fc.toggle_input_method_key += ["C-Yen"]
+fc.toggle_input_method_key += ["C-o"]
+# fc.toggle_input_method_key += ["O-LAlt"]
 fc.toggle_input_method_key = ["C-o"]
 
 #---------------------------------------------------------------------------------------------------
@@ -267,8 +272,10 @@ fc.lancherList_listers = [
 # [section-extensions] -----------------------------------------------------------------------------
 
 # Emacs の shell-command-on-region の機能をサポートする
-# fc.Linux_tool = "BusyBox"
 # fc.Linux_tool = "WSL"
+# fc.Linux_tool = "MSYS2"
+# fc.Linux_tool = "Cygwin"
+# fc.Linux_tool = "BusyBox"
 # exec(readConfigExtension(r"shell_command_on_region\config.py"), dict(globals(), **locals()))
 
 # C-Enter に F2（編集モード移行）を割り当てる
