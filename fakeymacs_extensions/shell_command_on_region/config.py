@@ -9,8 +9,29 @@ try:
     fc.Linux_tool
 except:
     # 次の設定のいずれかを有効にする
-    fc.Linux_tool = "BusyBox"
-    # fc.Linux_tool = "WSL"
+    fc.Linux_tool = "WSL"
+    # fc.Linux_tool = "MSYS2"
+    # fc.Linux_tool = "Cygwin"
+    # fc.Linux_tool = "BusyBox"
+
+try:
+    # 設定されているか？
+    fc.MSYS2_path
+except:
+    fc.MSYS2_path = r"C:\msys64"
+
+try:
+    # 設定されているか？
+    fc.Cygwin_path
+except:
+    fc.Cygwin_path = r"C:\cygwin64"
+
+try:
+    # 設定されているか？
+    fc.BusyBox_path
+except:
+    fc.BusyBox_path = dataPath() + r"\fakeymacs_extensions\shell_command_on_region"
+    # fc.BusyBox_path = r"C:\busybox64"
 
 import subprocess
 
@@ -35,27 +56,50 @@ def shell_command_on_region():
             delay(0.5)
             clipboard_text = re.sub("\r", "", getClipboardText())
 
-            if fc.Linux_tool == "BusyBox":
-                command = [dataPath() + r"\fakeymacs_extensions\shell_command_on_region\busybox64.exe",
-                           "bash", "-c"]
-                command += [r"cd;" + shell_command]
-                encoding = "cp932"
+            env = dict(os.environ)
 
-            elif fc.Linux_tool == "WSL":
-                command = [r"C:\WINDOWS\SysNative\wsl.exe", "bash", "-c"]
-                command += [r"cd; tr -d '\r' | " + re.sub(r"(\$)", r"\\\1", shell_command)]
+            # 以降で実行するコマンドは、bash に -l オプションを付け、その配下で実行するようにしています。
+            # このため、bash を起動する環境の .bash_profile に多くの設定を記入していると、コマンドの
+            # 実行が遅かったり、コマンドが正しくフィルタとして機能しなかったりする場合があります。
+            # このようなときに .bash_profile 内の設定をコントロール（スキップ）できるようにするため、
+            # FAKEYMACS 環境変数を設定しています。
+            env["FAKEYMACS"] = "1"
+
+            if fc.Linux_tool == "WSL":
+                command = [r"C:\WINDOWS\SysNative\wsl.exe", "bash", "-l", "-c"]
+                command += [r"tr -d '\r' | " + re.sub(r"(\$)", r"\\\1", shell_command)]
+                env["LANG"] = "ja_JP.UTF8"
+                env["WSLENV"] = "FAKEYMACS:LANG"
                 encoding = "utf-8"
+
+            elif fc.Linux_tool == "MSYS2":
+                command = [fc.MSYS2_path + r"\usr\bin\bash.exe", "-l", "-c"]
+                command += [shell_command]
+                env["LANG"] = "ja_JP.UTF8"
+                encoding = "utf-8"
+
+            elif fc.Linux_tool == "Cygwin":
+                command = [fc.Cygwin_path + r"\bin\bash.exe", "-l", "-c"]
+                command += [r"tr -d '\r' | " + shell_command]
+                env["LANG"] = "ja_JP.UTF8"
+                encoding = "utf-8"
+
+            elif fc.Linux_tool == "BusyBox":
+                command = [fc.BusyBox_path + r"\busybox64.exe", "bash", "-l", "-c"]
+                command += [shell_command]
+                encoding = "cp932"
 
             try:
                 proc = subprocess.run(command,
                                       input=clipboard_text,
                                       stdout=subprocess.PIPE,
                                       stderr=subprocess.STDOUT,
+                                      timeout=10,
                                       creationflags=subprocess.CREATE_NO_WINDOW,
                                       encoding=encoding,
-                                      timeout=10)
+                                      env=env)
             except:
-                print("プログラムがエラー終了しました（タイムアウトによる終了含む）\n")
+                print("プログラムがエラー終了しました（タイムアウトによる終了も含む）\n")
                 return
 
             stdout_text = proc.stdout
@@ -63,9 +107,13 @@ def shell_command_on_region():
 
             print("$ cat region | " + shell_command)
             print("-" * 80)
-            print("\n".join(stdout_list[0:10]))
+
+            # Keyhac コンソールにタブを出力すると出力結果が不正になる場合があるため、expandtabs() で
+            # スペースに変換してから出力する
+            print("\n".join(stdout_list[0:10]).expandtabs())
             if len(stdout_list) > 10:
                 print("...")
+
             print("-" * 80)
             print("")
 
@@ -74,8 +122,8 @@ def shell_command_on_region():
                 keymap.clipboard_history._push(stdout_text)
 
             if fakeymacs.replace_region:
-                delay()
-                yank()
+                # delay() のコールでは yank に失敗することがあるため、delayedCall() 経由で実行する
+                keymap.delayedCall(yank, 30)
         else:
             print("コマンドが指定されていません\n")
 

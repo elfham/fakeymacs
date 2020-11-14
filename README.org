@@ -9,7 +9,7 @@ Keyhac for Windows ver 1.82 以上のバージョンでご利用ください。
 
 - https://sites.google.com/site/craftware/keyhac-ja
 
-manual は次のリンクを参照ください。
+manual は次のリンクを参照してください。
 
 1. [[fakeymacs_manuals/configuration_parameters.org][Configuration parameters]]
 1. [[fakeymacs_manuals/key_bindings.org][Key bindings]]
@@ -37,6 +37,7 @@ manual は次のリンクを参照ください。
 
 オプションとして、下記の拡張機能も利用可能です。
 
+- Emacs の shell-command-on-region の機能をサポートする
 - C-Enter に F2（編集モード移行）を割り当てる
 - Emacs の場合、IME 切り替え用のキーを C-\ に置き換える
 - 英語キーボード設定をした OS 上で、日本語キーボードを利用する場合の切り替えを行う
@@ -121,7 +122,7 @@ config_personal.py という名称に変更し、このファイルを修正す�
 |--------------------------------------+------------------------------------------------------------------------------------------------------------------|
 | Configuration Parameter              | Description                                                                                                      |
 |--------------------------------------+------------------------------------------------------------------------------------------------------------------|
-| ime                                  | 利用している IME を設定する                                                                                      |
+| ime                                  | 利用している IME を指定する                                                                                      |
 | not_emacs_target                     | Emacs のキーバインドに“したくない”アプリケーションソフトを指定する                                             |
 | ime_target                           | IME の切り替え“のみをしたい”アプリケーションソフトを指定する                                                   |
 | side_of_ctrl_key                     | 左右どちらの Ctrlキーを使うかを指定する                                                                          |
