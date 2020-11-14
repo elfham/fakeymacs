@@ -52,6 +52,7 @@ fc.not_emacs_target += [
     "Astro.exe",                    # Astroneer
     "Astro-Win64-Shipping.exe",     # Astroneer
     "Minecraft.Windows.exe",        # Minecraft
+    "ATrainPC.exe",                 # A-Train PC
 ]
 
 # IME の切り替え“のみをしたい”アプリケーションソフトを指定する
