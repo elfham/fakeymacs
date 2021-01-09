@@ -55,6 +55,7 @@ fc.not_emacs_target += [
     "Minecraft.Windows.exe",        # Minecraft
     "ATrainPC.exe",                 # A-Train PC
     "hl2.exe",                      # Portal
+    "DupFileEliminator.exe",        # DupFileEliminator
 ]
 
 # IME の切り替え“のみをしたい”アプリケーションソフトを指定する
