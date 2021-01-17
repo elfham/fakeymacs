@@ -6,10 +6,10 @@
 
 try:
     # 設定されているか？
-    fc.pop_ime_balloon_keys
+    fc.pop_ime_balloon_key
 except:
     # IME の状態を表示する機能を追加するキーを指定する
-    fc.pop_ime_balloon_keys = ["C-l"]
+    fc.pop_ime_balloon_key = ["C-l"]
 
 def pop_ime_balloon(window_keymap, key):
     # 定義済みの関数を抽出する
@@ -22,11 +22,10 @@ def pop_ime_balloon(window_keymap, key):
 
     def _func():
         func()
-
         # IME の状態を表示する
         popImeBalloon()
     return _func
 
-for key in fc.pop_ime_balloon_keys:
+for key in fc.pop_ime_balloon_key:
     define_key(keymap_emacs, key, pop_ime_balloon(keymap_emacs, key))
     define_key(keymap_ime,   key, pop_ime_balloon(keymap_ime,   key))

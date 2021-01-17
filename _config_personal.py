@@ -213,10 +213,12 @@ fc.lancherList_listers = [
 # exec(readConfigExtension(r"chrome_quick_tabs/config.py"), dict(globals(), **locals()))
 
 # Emacs の shell-command-on-region の機能をサポートする
-# fc.Linux_tool = "WSL"
-# fc.Linux_tool = "MSYS2"
-# fc.Linux_tool = "Cygwin"
-# fc.Linux_tool = "BusyBox"
+# fc.linux_tool = "WSL"
+# fc.linux_tool = "MSYS2"
+# fc.linux_tool = "Cygwin"
+# fc.linux_tool = "BusyBox"
+# fc.bash_options = []
+# fc.bash_options = ["-l"]
 # exec(readConfigExtension(r"shell_command_on_region\config.py"), dict(globals(), **locals()))
 
 # 指定したアプリケーションソフトに F2（編集モード移行）を割り当てるキーを設定する
@@ -235,6 +237,6 @@ fc.lancherList_listers = [
 # exec(readConfigExtension(r"emacsclient/config.py"), dict(globals(), **locals()))
 
 # 指定したキーを押下したときに IME の状態を表示する機能を追加する
-# fc.pop_ime_balloon_keys = ["C-l"]
-# fc.pop_ime_balloon_keys += ["O-" + fc.side_of_ctrl_key + "Ctrl"] # Ctrl キーの単押し
+# fc.pop_ime_balloon_key = ["C-l"]
+# fc.pop_ime_balloon_key += ["O-" + fc.side_of_ctrl_key + "Ctrl"] # Ctrl キーの単押し
 # exec(readConfigExtension(r"pop_ime_balloon/config.py"), dict(globals(), **locals()))
