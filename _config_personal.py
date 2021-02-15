@@ -107,7 +107,7 @@ fc.set_input_method_key += [["(29)", "(28)"]]
 
 # VSCode の Terminal内 で ４つのキー（Ctrl+k、Ctrl+r、Ctrl+s、Ctrl+y）のダイレクト入力機能を使うか
 # どうかを指定する（True: 使う、False: 使わない）
-# fc.use_vscode_terminal_key_direct_input = True
+# fc.use_direct_input_in_vscode_terminal = True
 
 # アプリケーションキーとして利用するキーを指定する
 # （修飾キーに Alt は使えないようです）
@@ -237,6 +237,6 @@ fc.lancherList_listers = [
 # exec(readConfigExtension(r"emacsclient/config.py"), dict(globals(), **locals()))
 
 # 指定したキーを押下したときに IME の状態を表示する機能を追加する
-# fc.pop_ime_balloon_key = ["C-l"]
-# fc.pop_ime_balloon_key += ["O-" + fc.side_of_ctrl_key + "Ctrl"] # Ctrl キーの単押し
+# fc.pop_ime_balloon_key = ["C-Semicolon"]
+# fc.pop_ime_balloon_key = ["O-" + fc.side_of_ctrl_key + "Ctrl"] # Ctrl キーの単押し
 # exec(readConfigExtension(r"pop_ime_balloon/config.py"), dict(globals(), **locals()))
