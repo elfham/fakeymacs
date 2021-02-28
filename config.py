@@ -5,7 +5,7 @@
 ## Windows の操作を Emacs のキーバインドで行うための設定（Keyhac版）
 ##
 
-fakeymacs_version = "20210203_01"
+fakeymacs_version = "20210222_02"
 
 # このスクリプトは、Keyhac for Windows ver 1.82 以降で動作します。
 #   https://sites.google.com/site/craftware/keyhac-ja
@@ -17,8 +17,9 @@ fakeymacs_version = "20210203_01"
 # 本設定を利用するための仕様は、以下を参照してください。
 #
 # ＜共通の仕様＞
-# ・emacs_target_class 変数、not_emacs_target 変数、ime_target 変数で、Emacsキーバインドや
-#   IME の切り替えキーバインドの対象とするアプリケーションソフトを指定できる。
+# ・emacs_target_class 変数、not_emacs_target 変数、ime_target 変数、vscode_target 変数で、
+#   Emacsキーバインドや IME の切り替えキーバインドの対象とするアプリケーションソフトを指定
+#   できる。
 # ・skip_settings_key 変数で、キーマップ毎にキー設定をスキップするキーを指定できる。
 # ・emacs_exclusion_key 変数で、Emacs キーバインドから除外するキーを指定できる。
 # ・not_clipboard_target 変数で、clipboard 監視の対象外とするアプリケーションソフトを指定
@@ -304,6 +305,14 @@ def configure(keymap):
                                "putty.exe",              # PuTTY
                                "ttermpro.exe",           # TeraTerm
                                "MobaXterm.exe",          # MobaXterm
+                              ]
+
+    # VSCode 用のキーバインドを利用するアプリケーションソフトを指定する
+    # （ブラウザを指定した場合には、github1s.com にアクセスして開く VSCode で利用可能となります）
+    fc.vscode_target        = ["Code.exe"]
+    fc.vscode_target       += ["chrome.exe",
+                               "msedge.exe",
+                               "firefox.exe"
                               ]
 
     # キーマップ毎にキー設定をスキップするキーを指定する
@@ -710,10 +719,10 @@ def configure(keymap):
             processName not in fc.not_emacs_target):
             if processName in fakeymacs.not_emacs_keybind:
                 fakeymacs.not_emacs_keybind.remove(processName)
-                keymap.popBalloon("Keybind", "[Emacs Keybind]", 1000)
+                keymap.popBalloon("keybind", "[Enable Emacs keybind]", 1000)
             else:
                 fakeymacs.not_emacs_keybind.append(processName)
-                keymap.popBalloon("Keybind", "[not Emacs Keybind]", 1000)
+                keymap.popBalloon("keybind", "[Disable Emacs keybind]", 1000)
 
             keymap.updateKeymap()
 
@@ -878,7 +887,7 @@ def configure(keymap):
 
     def kill_line(repeat=1):
         if (fc.use_direct_input_in_vscode_terminal and
-            checkWindow("Code.exe", "Chrome_WidgetWin_1") and # VSCode
+            isVscodeTarget() and
             fakeymacs.vscode_focus == "terminal"):
             self_insert_command("C-k")()
         else:
@@ -941,7 +950,7 @@ def configure(keymap):
 
     def yank():
         if (fc.use_direct_input_in_vscode_terminal and
-            checkWindow("Code.exe", "Chrome_WidgetWin_1") and # VSCode
+            isVscodeTarget() and
             fakeymacs.vscode_focus == "terminal"):
             self_insert_command("C-y")()
         else:
@@ -995,13 +1004,24 @@ def configure(keymap):
     def kill_buffer():
         self_insert_command("C-F4")()
 
+    def kill_buffer2():
+        if isVscodeTarget():
+            # VSCode Command : Close Editor
+            vscodeExecuteCommand("workbench.action.closeActiveEditor")()
+        else:
+            kill_buffer()
+
     def switch_to_buffer():
-        self_insert_command("C-Tab")()
+        if isVscodeTarget():
+            # VSCode Command : Quick Open Privious Recently Used Editor in Group
+            vscodeExecuteCommand("workbench.action.quickOpenPreviousRecentlyUsedEditorInGroup")()
+        else:
+            switch_to_buffer()
 
     def list_buffers():
-        if checkWindow("Code.exe", "Chrome_WidgetWin_1"): # VSCode
+        if isVscodeTarget():
             # VSCode Command : Show All Editors By Most Recently Used
-            vscodeExecuteCommand("Sh-Al-Ed-By-Mo-Re-Us")()
+            vscodeExecuteCommand("workbench.action.showAllEditorsByMostRecentlyUsed")()
 
     def other_window():
         window_list = getWindowList()
@@ -1017,7 +1037,7 @@ def configure(keymap):
     def isearch(direction):
         if (checkWindow("powershell.exe", "ConsoleWindowClass") or # PowerShell
             (fc.use_direct_input_in_vscode_terminal and
-             checkWindow("Code.exe", "Chrome_WidgetWin_1") and     # VSCode
+             isVscodeTarget() and
              fakeymacs.vscode_focus == "terminal")):
             self_insert_command({"backward":"C-r", "forward":"C-s"}[direction])()
         else:
@@ -1175,53 +1195,59 @@ def configure(keymap):
     ## VSCode 用
     ##################################################
 
+    def isVscodeTarget():
+        if keymap.getWindow().getProcessName() in fc.vscode_target:
+            return True
+        else:
+            return False
+
     ## マルチカーソル
     def mark_up():
-        if checkWindow("Code.exe", "Chrome_WidgetWin_1"): # VSCode
+        if isVscodeTarget():
             # VSCode Command : cursorColumnSelectUp
             self_insert_command("C-S-A-Up")()
 
     def mark_down():
-        if checkWindow("Code.exe", "Chrome_WidgetWin_1"): # VSCode
+        if isVscodeTarget():
             # VSCode Command : cursorColumnSelectDown
             self_insert_command("C-S-A-Down")()
 
     def mark_next_like_this():
-        if checkWindow("Code.exe", "Chrome_WidgetWin_1"): # VSCode
+        if isVscodeTarget():
             # VSCode Command : Add Selection To Next Find Match
             self_insert_command("C-d")()
 
     def skip_to_next_like_this():
-        if checkWindow("Code.exe", "Chrome_WidgetWin_1"): # VSCode
+        if isVscodeTarget():
             # VSCode Command : Move Last Selection To Next Find Match
             self_insert_command("C-k", "C-d")()
 
     ## エディタ / ターミナル操作
     def create_terminal():
-        if checkWindow("Code.exe", "Chrome_WidgetWin_1"): # VSCode
+        if isVscodeTarget():
             # VSCode Command : Create New Integrated Terminal
-            vscodeExecuteCommand2("Te:Cr-Ne-In-Te")()
+            vscodeExecuteCommand2("workbench.action.terminal.new")()
             if fc.use_direct_input_in_vscode_terminal:
                 fakeymacs.vscode_focus = "terminal"
 
     def toggle_terminal():
-        if checkWindow("Code.exe", "Chrome_WidgetWin_1"): # VSCode
+        if isVscodeTarget():
             if fc.use_direct_input_in_vscode_terminal:
                 if fakeymacs.vscode_focus == "not_terminal":
-                    # VSCode Command : Focus Terminal
-                    vscodeExecuteCommand2("Te:Fo-Te")()
+                    # VSCode Command : Focus on Terminal View
+                    vscodeExecuteCommand2("terminal.focus")()
                     fakeymacs.vscode_focus = "terminal"
                 else:
                     # VSCode Command : Close Panel
-                    vscodeExecuteCommand2("Vi:Cl-Pa")()
+                    vscodeExecuteCommand2("workbench.action.closePanel")()
                     fakeymacs.vscode_focus = "not_terminal"
             else:
                 # VSCode Command : Toggle Integrated Terminal
-                vscodeExecuteCommand2("Vi:To-In-Te")()
+                vscodeExecuteCommand2("workbench.action.terminal.toggleTerminal")()
 
     def switch_focus(number):
         def _func():
-            if checkWindow("Code.exe", "Chrome_WidgetWin_1"): # VSCode
+            if isVscodeTarget():
                 # VSCode Command : Focus n-th Editor Group
                 self_insert_command("C-{}".format(number))()
                 if fc.use_direct_input_in_vscode_terminal:
@@ -1229,40 +1255,40 @@ def configure(keymap):
         return _func
 
     def other_group():
-        if checkWindow("Code.exe", "Chrome_WidgetWin_1"): # VSCode
+        if isVscodeTarget():
             # VSCode Command : Navigate Between Editor Groups
-            vscodeExecuteCommand("Vi:Na-Be-Ed-Gr")()
+            vscodeExecuteCommand("workbench.action.navigateEditorGroups")()
             if fc.use_direct_input_in_vscode_terminal:
                 fakeymacs.vscode_focus = "not_terminal"
 
     def delete_group():
-        if checkWindow("Code.exe", "Chrome_WidgetWin_1"): # VSCode
+        if isVscodeTarget():
             # VSCode Command : Close All Editors in Group
-            vscodeExecuteCommand("Vi:Cl-Al-Ed-in-Gr")()
+            vscodeExecuteCommand("workbench.action.closeEditorsInGroup")()
 
     def delete_other_groups():
-        if checkWindow("Code.exe", "Chrome_WidgetWin_1"): # VSCode
+        if isVscodeTarget():
             # VSCode Command : Close Editors in Other Groups
-            vscodeExecuteCommand("Vi:Cl-Ed-in-Ot-Gr")()
+            vscodeExecuteCommand("workbench.action.closeEditorsInOtherGroups")()
 
     def split_editor_below():
-        if checkWindow("Code.exe", "Chrome_WidgetWin_1"): # VSCode
+        if isVscodeTarget():
             # VSCode Command : Split Editor Orthogonal
             self_insert_command("C-k", "C-Yen")()
 
     def split_editor_right():
-        if checkWindow("Code.exe", "Chrome_WidgetWin_1"): # VSCode
+        if isVscodeTarget():
             # VSCode Command : Split Editor
             self_insert_command("C-Yen")()
 
     ## その他
     def execute_extended_command():
-        if checkWindow("Code.exe", "Chrome_WidgetWin_1"): # VSCode
+        if isVscodeTarget():
             # VSCode Command : Show All Commands
             self_insert_command3("f1")()
 
     def comment_dwim():
-        if checkWindow("Code.exe", "Chrome_WidgetWin_1"): # VSCode
+        if isVscodeTarget():
             # VSCode Command : Toggle Line Comment
             self_insert_command("C-Slash")()
 
@@ -1763,8 +1789,8 @@ def configure(keymap):
     define_key(keymap_emacs, "Ctl-x C-p", reset_search(reset_undo(reset_counter(mark_page))))
 
     ## 「バッファ / ウィンドウ操作」のキー設定
-    define_key(keymap_emacs, "Ctl-x k",   reset_search(reset_undo(reset_counter(reset_mark(kill_buffer)))))
     define_key(keymap_emacs, "M-k",       reset_search(reset_undo(reset_counter(reset_mark(kill_buffer)))))
+    define_key(keymap_emacs, "Ctl-x k",   reset_search(reset_undo(reset_counter(reset_mark(kill_buffer2)))))
     define_key(keymap_emacs, "Ctl-x b",   reset_search(reset_undo(reset_counter(reset_mark(switch_to_buffer)))))
     define_key(keymap_emacs, "Ctl-x C-b", reset_search(reset_undo(reset_counter(reset_mark(list_buffers)))))
 
