@@ -55,6 +55,7 @@ fc.not_emacs_target += [
     "Minecraft.Windows.exe",        # Minecraft
     "ATrainPC.exe",                 # A-Train PC
     "hl2.exe",                      # Portal
+    "portal2.exe",                  # Portal 2
     "DupFileEliminator.exe",        # DupFileEliminator
 ]
 
