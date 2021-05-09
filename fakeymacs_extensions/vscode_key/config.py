@@ -98,12 +98,12 @@ def kill_buffer():
 
 def switch_to_buffer():
     # VSCode Command : View: Quick Open Privious Recently Used Editor in Group
-    vscodeExecuteCommand("VQO-P-RUEiG")()
+    vscodeExecuteCommand("VQO-P-RUEi")()
     # vscodeExecuteCommand("workbench.action.quickOpenPreviousRecentlyUsedEditorInGroup")()
 
 def list_buffers():
     # VSCode Command : View: Show All Editors By Most Recently Used
-    vscodeExecuteCommand("VSAEBMRU")()
+    vscodeExecuteCommand("VSAEBM")()
     # vscodeExecuteCommand("workbench.action.showAllEditorsByMostRecentlyUsed")()
 
 ## 文字列検索
@@ -123,12 +123,12 @@ def isearch_forward():
 ## エディタ操作
 def delete_group():
     # VSCode Command : View: Close All Editors in Group
-    vscodeExecuteCommand("VCAEiG")()
+    vscodeExecuteCommand("VCAEi")()
     # vscodeExecuteCommand("workbench.action.closeEditorsInGroup")()
 
 def delete_other_groups():
     # VSCode Command : View: Close Editors in Other Groups
-    vscodeExecuteCommand("VCEiOG")()
+    vscodeExecuteCommand("VCEiO")()
     # vscodeExecuteCommand("workbench.action.closeEditorsInOtherGroups")()
 
 def split_editor_below():
@@ -152,7 +152,7 @@ def other_group():
 
 def switch_focus(number):
     def _func():
-        # VSCode Command : View: Focus n-th Editor Group
+        # VSCode Command : View: Focus Side Bar or n-th Editor Group
         self_insert_command("C-{}".format(number))()
 
         if fc.use_direct_input_in_vscode_terminal:
@@ -161,36 +161,36 @@ def switch_focus(number):
 
 ## マルチカーソル
 def mark_up():
-    # VSCode Command : cursorColumnSelectUp
+    # VSCode Command ID : cursorColumnSelectUp
     self_insert_command("C-S-A-Up")()
     # vscodeExecuteCommand("cursorColumnSelectUp")()
 
 def mark_down():
-    # VSCode Command : cursorColumnSelectDown
+    # VSCode Command ID : cursorColumnSelectDown
     self_insert_command("C-S-A-Down")()
     # vscodeExecuteCommand("cursorColumnSelectDown")()
 
 def mark_next_like_this():
     # VSCode Command : Add Selection To Next Find Match
     self_insert_command("C-d")()
-    # vscodeExecuteCommand("ASTNFM")()
-    # vscodeExecuteCommand("cursorColumnSelectDown")()
+    # vscodeExecuteCommand("ASTN")()
+    # vscodeExecuteCommand("editor.action.addSelectionToNextFindMatch")()
 
 def mark_all_like_this():
     # VSCode Command : Select All Occurrences of Find Match
     self_insert_command("C-S-l")()
-    # vscodeExecuteCommand("SAOoFM")()
+    # vscodeExecuteCommand("SAOo")()
     # vscodeExecuteCommand("editor.action.selectHighlights")()
 
 def skip_to_next_like_this():
     # VSCode Command : Move Last Selection To Next Find Match
     self_insert_command("C-k", "C-d")()
-    # vscodeExecuteCommand("MLSTNFM")()
+    # vscodeExecuteCommand("MLSTN")()
     # vscodeExecuteCommand("editor.action.moveSelectionToNextFindMatch")()
 
 def skip_to_previous_like_this():
     # VSCode Command : Move Last Selection To Previous Find Match
-    vscodeExecuteCommand("MLSTPFM")()
+    vscodeExecuteCommand("MLSTP")()
     # vscodeExecuteCommand("editor.action.moveSelectionToPreviousFindMatch")()
 
 ## ターミナル操作
@@ -259,8 +259,8 @@ for n in range(10):
         define_key(keymap_vscode, "C-{}".format(n), reset_search(reset_undo(reset_counter(reset_mark(switch_focus(n))))))
 
 ## 「マルチカーソル」のキー設定
-define_key(keymap_vscode, "C-A-p",   reset_search(reset_undo(reset_counter(mark_up))))
-define_key(keymap_vscode, "C-A-n",   reset_search(reset_undo(reset_counter(mark_down))))
+define_key(keymap_vscode, "C-A-p",   reset_search(reset_undo(reset_counter(reset_mark(mark_up)))))
+define_key(keymap_vscode, "C-A-n",   reset_search(reset_undo(reset_counter(reset_mark(mark_down)))))
 define_key(keymap_vscode, "C-A-b",   reset_search(reset_undo(reset_counter(mark2(repeat(backward_char), False)))))
 define_key(keymap_vscode, "C-A-f",   reset_search(reset_undo(reset_counter(mark2(repeat(forward_char), True)))))
 define_key(keymap_vscode, "C-A-a",   reset_search(reset_undo(reset_counter(mark2(move_beginning_of_line, False)))))
