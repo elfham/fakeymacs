@@ -61,12 +61,12 @@ keymap_vscode = keymap.defineWindowKeymap(check_func=is_vscode_target)
 def self_insert_command4(*keys):
     func = self_insert_command(*keys)
     def _func():
-        imeStatus = keymap.getWindow().getImeStatus()
-        if imeStatus:
+        ime_status = keymap.getWindow().getImeStatus()
+        if ime_status:
             keymap.getWindow().setImeStatus(0)
         func()
         delay()
-        if imeStatus:
+        if ime_status:
             keymap.getWindow().setImeStatus(1)
     return _func
 
@@ -121,7 +121,7 @@ def kill_buffer():
 
 def switch_to_buffer():
     # VSCode Command : View: Quick Open Privious Recently Used Editor in Group
-    vscodeExecuteCommand("VQO-P-RUEi")()
+    vscodeExecuteCommand("VQOPrRUEi")()
     # vscodeExecuteCommand("workbench.action.quickOpenPreviousRecentlyUsedEditorInGroup")()
 
 def list_buffers():
@@ -166,7 +166,7 @@ def split_editor_right():
 
 def other_group():
     # VSCode Command : View: Navigate Between Editor Groups
-    vscodeExecuteCommand("VNB-EG")()
+    vscodeExecuteCommand("VNBEdG")()
     # vscodeExecuteCommand("workbench.action.navigateEditorGroups")()
 
     if fc.use_direct_input_in_vscode_terminal:
@@ -263,6 +263,16 @@ def skip_to_next_like_this():
 
     fakeymacs.rectangle_mode = False
     fakeymacs.forward_direction = True
+
+def expand_region():
+    # VSCode Command : Expand Selection
+    self_insert_command("A-S-Right")()
+    # vscodeExecuteCommand("editor.action.smartSelect.expand")()
+
+def shrink_region():
+    # VSCode Command : Shrink Selection
+    self_insert_command("A-S-Left")()
+    # vscodeExecuteCommand("editor.action.smartSelect.shrink")()
 
 def cursor_undo():
     if fakeymacs.is_undo_mode:
@@ -369,10 +379,13 @@ define_key3(keymap_emacs, "Ctl-x 2", split_editor_below)
 define_key3(keymap_emacs, "Ctl-x 3", split_editor_right)
 define_key3(keymap_emacs, "Ctl-x o", reset_search(reset_undo(reset_counter(reset_mark(other_group)))))
 
+if fc.use_ctrl_digit_key_for_digit_argument:
+    key = "C-A-{}"
+else:
+    key = "C-{}"
+
 for n in range(10):
-    define_key(keymap_vscode, "C-A-{}".format(n), reset_search(reset_undo(reset_counter(reset_mark(switch_focus(n))))))
-    if not fc.use_ctrl_digit_key_for_digit_argument:
-        define_key(keymap_vscode, "C-{}".format(n), reset_search(reset_undo(reset_counter(reset_mark(switch_focus(n))))))
+    define_key(keymap_vscode, key.format(n), reset_search(reset_undo(reset_counter(reset_mark(switch_focus(n))))))
 
 ## 「矩形選択 / マルチカーソル」のキー設定
 define_key(keymap_vscode, "C-A-p",   reset_search(reset_undo(reset_counter(repeat(mark_previous_line)))))
@@ -385,8 +398,10 @@ define_key(keymap_vscode, "C-A-a",   reset_search(reset_undo(reset_counter(mark_
 define_key(keymap_vscode, "C-A-e",   reset_search(reset_undo(reset_counter(mark_end_of_line))))
 define_key(keymap_vscode, "C-A-d",   reset_search(reset_undo(reset_counter(mark_next_like_this))))
 define_key(keymap_vscode, "C-A-S-d", reset_search(reset_undo(reset_counter(mark_all_like_this))))
-define_key(keymap_vscode, "C-A-r",   reset_search(reset_undo(reset_counter(skip_to_previous_like_this))))
 define_key(keymap_vscode, "C-A-s",   reset_search(reset_undo(reset_counter(skip_to_next_like_this))))
+define_key(keymap_vscode, "C-A-S-s", reset_search(reset_undo(reset_counter(skip_to_previous_like_this))))
+define_key(keymap_vscode, "C-A-x",   reset_search(reset_undo(reset_counter(expand_region))))
+define_key(keymap_vscode, "C-A-S-x", reset_search(reset_undo(reset_counter(shrink_region))))
 define_key(keymap_vscode, "C-A-u",   reset_search(reset_counter(cursor_undo)))
 define_key(keymap_vscode, "C-A-g",   reset_search(reset_counter(cursor_undo_switching)))
 
