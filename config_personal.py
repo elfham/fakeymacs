@@ -49,6 +49,7 @@ fc.not_emacs_target += [
     "xvic.exe",                     # VICE VIC20
     "openmsx.exe",                  # openMSX
     "blueMSX.exe",                  # blueMSX
+    "np2.exe",                      # Neko Project II
     "Cubase9.5.exe",                # Cubase
     "Astro.exe",                    # Astroneer
     "Astro-Win64-Shipping.exe",     # Astroneer
